@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Learning Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e0f2e9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.3) 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ff2e4d;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff2e4d, #ff7e5f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .student-info {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #4a5568;
+        }
+
+        .student-name {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .weakness-label {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            color: #333;
+            background-color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: white;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .game-container {
+            width: 95vw;
+            height: 70vh;
+            max-width: 1400px;
+            display: grid;
+            gap: 15px;
+            margin: 20px auto;
+            perspective: 1000px;
+            padding: 0 20px;
+        }
+
+        /* Responsive grid layouts based on word count */
+        .game-container.small-grid {
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+        }
+
+        .game-container.medium-grid {
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+        }
+
+        .game-container.large-grid {
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+        }
+
+        .bubble {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0, 0, 0, 0.1),
+                inset 0 3px 10px rgba(255, 255, 255, 0.3);
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            min-width: 80px;
+        }
+
+        /* Dynamic font sizing based on container */
+        .bubble.small {
+            font-size: clamp(18px, 3.5vw, 24px);
+        }
+
+        .bubble.medium {
+            font-size: clamp(16px, 3vw, 20px);
+        }
+
+        .bubble.large {
+            font-size: clamp(14px, 2.5vw, 18px);
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            z-index: -1;
+            border-radius: 30px;
+        }
+
+        .bubble:hover {
+            transform: translateY(-5px) translateZ(10px);
+            box-shadow:
+                0 15px 25px rgba(0, 0, 0, 0.25),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.1),
+                inset 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .bubble.selected {
+            transform: scale(1.05) translateZ(20px);
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.3),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.1),
+                inset 0 5px 15px rgba(255, 255, 255, 0.3);
+            border: 3px solid white;
+        }
+
+        .bubble.matched {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0);
+            transition: all 0.5s ease;
+        }
+
+        
+        .completion-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 100;
+            animation: popIn 0.8s ease-out;
+        }
+
+        .completion-message h2 {
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .completion-message p {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .completion-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .instructions {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .instructions h3 {
+            color: #ff2e4d;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #ff2e4d, #ff7e5f);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                width: 95vw;
+                height: 60vh;
+                gap: 10px;
+                padding: 0 10px;
+            }
+
+            .game-container.small-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+            }
+
+            .game-container.medium-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+
+            .game-container.large-grid {
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+
+            .bubble {
+                min-height: 60px;
+                min-width: 60px;
+                padding: 8px;
+                border-radius: 12px;
+            }
+
+            .bubble.small {
+                font-size: clamp(16px, 4vw, 20px);
+            }
+
+            .bubble.medium {
+                font-size: clamp(14px, 3.5vw, 18px);
+            }
+
+            .bubble.large {
+                font-size: clamp(12px, 3vw, 16px);
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .student-info {
+                font-size: 1rem;
+            }
+
+            .navigation {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                height: 55vh;
+                gap: 8px;
+            }
+
+            .game-container.small-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+            }
+
+            .game-container.medium-grid {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(8, 1fr);
+            }
+
+            .game-container.large-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(9, 1fr);
+            }
+
+            .bubble {
+                min-height: 50px;
+                min-width: 50px;
+                padding: 5px;
+            }
+
+            .bubble.small {
+                font-size: clamp(14px, 4.5vw, 18px);
+            }
+
+            .bubble.medium {
+                font-size: clamp(12px, 4vw, 16px);
+            }
+
+            .bubble.large {
+                font-size: clamp(10px, 3.5vw, 14px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Personalized Learning Game</h1>
+        <div id="studentInfo" class="student-info" style="display: none;">
+            <div class="student-name" id="studentName"></div>
+            <div class="weakness-label" id="gameModeLabel">Personalized learning game</div>
+        </div>
+        <div class="timer">Time: <span id="time">0</span> seconds</div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="goHome()">🏠 Home</button>
+        <button class="nav-btn" onclick="tryNewStudent()">👤 New Student</button>
+        <button class="nav-btn" onclick="showInstructions()">📖 Instructions</button>
+    </div>
+
+    <div id="gameContainer" class="game-container">
+        <!-- Bubbles will be dynamically generated -->
+    </div>
+
+    <button class="restart-btn" id="restartBtn">Restart Game</button>
+
+    <div class="instructions" id="instructions" style="display: none;">
+        <h3>How to Play</h3>
+        <p>Click on bubbles to match English words with their Arabic translations.
+           This game features vocabulary based on your difficulty level.
+           Match all pairs successfully to complete the game!</p>
+    </div>
+
+    <div class="completion-message" id="completionMessage">
+        <h2>🎉 Excellent Work!</h2>
+        <p>Completed in: <span id="completionTime">0</span> seconds</p>
+        <p>Great job on mastering your weakness vocabulary!</p>
+        <div class="completion-actions">
+            <button class="action-btn" onclick="restartGame()">Play Again</button>
+            <button class="action-btn" onclick="tryNewStudent()">New Student</button>
+            <button class="action-btn" onclick="goHome()">Home</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current student data
+            const currentStudent = studentDataService.getCurrentStudent();
+
+            if (!currentStudent) {
+                showError('No student data found. Please enter your ID first.');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+                return;
+            }
+
+            // Initialize game with student data
+            initializeGame(currentStudent);
+        });
+
+        function initializeGame(studentData) {
+            // Display student info
+            const isGuestMode = studentData.isGuestMode;
+            const displayName = isGuestMode ? 'Guest User' : studentData.student.name;
+            const displayId = isGuestMode ? 'Guest' : `ID: ${studentData.student.id}`;
+            const levelName = { 1: 'Beginner', 2: 'Intermediate', 3: 'Advanced' }[studentData.student.englishLevel];
+
+            document.getElementById('studentName').textContent = `${displayName} (${displayId}) - ${levelName} Level`;
+
+            // Update game mode label
+            const modeLabel = document.getElementById('gameModeLabel');
+            if (isGuestMode) {
+                modeLabel.textContent = `Guest Mode - English-Arabic Vocabulary`;
+            } else {
+                modeLabel.textContent = `Personalized Learning - English-Arabic Vocabulary`;
+            }
+            document.getElementById('studentInfo').style.display = 'block';
+
+            // Set up game variables
+            const gameContainer = document.getElementById('gameContainer');
+            const timeElement = document.getElementById('time');
+            const completionMessage = document.getElementById('completionMessage');
+            const completionTimeElement = document.getElementById('completionTime');
+            const restartBtn = document.getElementById('restartBtn');
+
+            let startTime = null;
+            let timerInterval = null;
+            let selectedBubbles = [];
+            let matchedPairs = 0;
+
+            // Create word pairs from student data (English-Arabic only)
+            const wordPairs = studentData.weaknesses.map(weakness => ({
+                english: weakness.english,
+                arabic: weakness.arabic,
+                isWeakness: weakness.isWeakness || false
+            }));
+
+            // Generate random colors
+            function getRandomColor() {
+                const colors = [
+                    '#FF6B6B', '#4ECDC4', '#45B7D1', '#FF9F1C',
+                    '#C44569', '#786FA6', '#F8A5C2', '#54A0FF',
+                    '#5F27CD', '#00D2D3', '#FF9FF3', '#F368E0'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            // Create bubbles with responsive grid layout
+            function createBubbles() {
+                gameContainer.innerHTML = '';
+                const allWords = [];
+
+                // Add all English and Arabic words
+                wordPairs.forEach(pair => {
+                    allWords.push({
+                        text: pair.english,
+                        type: 'english',
+                        translations: [pair.arabic]
+                    });
+                    allWords.push({
+                        text: pair.arabic,
+                        type: 'arabic',
+                        translations: [pair.english]
+                    });
+                });
+
+                // Use words based on difficulty level
+                const maxPairs = studentData.gameDifficulty.wordPairsPerRound;
+                const limitedWords = allWords.slice(0, maxPairs * 2);
+
+                // Random shuffle
+                for (let i = limitedWords.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [limitedWords[i], limitedWords[j]] = [limitedWords[j], limitedWords[i]];
+                }
+
+                // Set appropriate grid class based on word count
+                gameContainer.className = 'game-container';
+                if (maxPairs <= 6) {
+                    gameContainer.classList.add('small-grid');
+                } else if (maxPairs <= 12) {
+                    gameContainer.classList.add('medium-grid');
+                } else {
+                    gameContainer.classList.add('large-grid');
+                }
+
+                // Apply difficulty-based bubble sizing
+                const bubbleSize = studentData.gameDifficulty.bubbleSize;
+                gameContainer.classList.add(bubbleSize);
+
+                // Create bubble elements
+                limitedWords.forEach(word => {
+                    const bubble = document.createElement('div');
+                    bubble.className = `bubble ${bubbleSize}`;
+
+                    bubble.textContent = word.text;
+                    bubble.style.backgroundColor = getRandomColor();
+                    bubble.dataset.type = word.type;
+                    bubble.dataset.value = word.text;
+                    bubble.dataset.translations = JSON.stringify(word.translations);
+
+                    bubble.addEventListener('click', () => handleBubbleClick(bubble));
+
+                    gameContainer.appendChild(bubble);
+                });
+            }
+
+            // Handle bubble click
+            function handleBubbleClick(bubble) {
+                if (bubble.classList.contains('matched') || bubble.classList.contains('selected')) {
+                    return;
+                }
+
+                playPopSound();
+                bubble.classList.add('selected');
+                selectedBubbles.push(bubble);
+
+                if (selectedBubbles.length === 2) {
+                    const first = selectedBubbles[0];
+                    const second = selectedBubbles[1];
+
+                    const firstTranslations = JSON.parse(first.dataset.translations);
+                    const secondTranslations = JSON.parse(second.dataset.translations);
+
+                    // Check if they match
+                    if (first.dataset.type !== second.dataset.type &&
+                        (firstTranslations.includes(second.dataset.value) ||
+                         secondTranslations.includes(first.dataset.value))) {
+                        // Match successful
+                        setTimeout(() => {
+                            first.classList.add('matched');
+                            second.classList.add('matched');
+                            playSuccessSound();
+                            selectedBubbles = [];
+
+                            matchedPairs++;
+
+                            // Check if game is complete
+                            if (matchedPairs === Math.min(wordPairs.length, studentData.gameDifficulty.wordPairsPerRound)) {
+                                endGame();
+                            }
+                        }, 500);
+                    } else {
+                        // No match
+                        setTimeout(() => {
+                            first.classList.remove('selected');
+                            second.classList.remove('selected');
+                            playErrorSound();
+                            selectedBubbles = [];
+                        }, 1000);
+                    }
+                }
+            }
+
+            // Start game
+            function startGame() {
+                startTime = new Date();
+                timerInterval = setInterval(() => {
+                    const currentTime = new Date();
+                    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+                    timeElement.textContent = elapsedTime;
+                }, 1000);
+            }
+
+            // End game
+            function endGame() {
+                clearInterval(timerInterval);
+                const endTime = new Date();
+                const totalTime = Math.floor((endTime - startTime) / 1000);
+
+                completionTimeElement.textContent = totalTime;
+                completionMessage.style.display = 'block';
+            }
+
+            // Restart game
+            window.restartGame = function() {
+                clearInterval(timerInterval);
+                selectedBubbles = [];
+                matchedPairs = 0;
+                timeElement.textContent = '0';
+                completionMessage.style.display = 'none';
+
+                createBubbles();
+                startGame();
+            }
+
+            // Navigation functions
+            window.goHome = function() {
+                window.location.href = 'index.html';
+            }
+
+            window.tryNewStudent = function() {
+                studentDataService.clearCurrentStudent();
+                window.location.href = 'index.html';
+            }
+
+            window.showInstructions = function() {
+                const instructions = document.getElementById('instructions');
+                instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+            }
+
+            // Sound effects
+            function playPopSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+
+                    const gainNode = audioContext.createGain();
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (e) {
+                    console.log("Playing pop sound");
+                }
+            }
+
+            function playSuccessSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(1500, audioContext.currentTime + 0.2);
+
+                    const gainNode = audioContext.createGain();
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (e) {
+                    console.log("Playing success sound");
+                }
+            }
+
+            function playErrorSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime + 0.2);
+
+                    const gainNode = audioContext.createGain();
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (e) {
+                    console.log("Playing error sound");
+                }
+            }
+
+            // Initialize game
+            restartBtn.addEventListener('click', restartGame);
+            createBubbles();
+            startGame();
+        }
+
+        function showError(message) {
+            document.getElementById('gameContainer').innerHTML = `
+                <div class="error-message">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                    <p>You will be redirected to the home page...</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

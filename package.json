@@ -1,0 +1,43 @@
+{
+  "name": "tailored-learning-platform",
+  "version": "1.0.0",
+  "description": "Personalized vocabulary learning platform with student and guest modes",
+  "main": "index.html",
+  "homepage": ".",
+  "scripts": {
+    "start": "npx http-server -p 5000 -o",
+    "dev": "npx http-server -p 3000 -o",
+    "build": "echo 'Static site - no build required'",
+    "serve": "npx http-server -p 3200 -o",
+    "serve-8000": "npx http-server -p 8000 -o",
+    "serve-node": "npx serve . -l 3200 --no-rewrite",
+    "python": "python -m http.server 3200",
+    "python3": "python3 -m http.server 3200"
+  },
+  "keywords": [
+    "education",
+    "vocabulary",
+    "learning",
+    "game",
+    "static-site",
+    "arabic",
+    "english",
+    "personalized"
+  ],
+  "author": "Educational Platform Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1",
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/tailored-learning-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/tailored-learning-platform/issues"
+  }
+}

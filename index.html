@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #2f855a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .valid-ids {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .valid-ids h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .id-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .id-chip {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .id-chip:hover {
+            background: #5a67d8;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f7fafc;
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: #718096;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .difficulty-option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .difficulty-option input[type="radio"] {
+            display: none;
+        }
+
+        .difficulty-option input[type="radio"]:checked + label {
+            color: #667eea;
+        }
+
+        .difficulty-option input[type="radio"]:checked + .difficulty-option {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .difficulty-option label {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .level-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+        }
+
+        .level-desc {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #718096;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Learning Platform</h1>
+        <p class="subtitle">Choose your learning mode to get started</p>
+
+        <!-- Mode Selection -->
+        <div class="mode-selector">
+            <button class="mode-btn active" id="studentModeBtn" onclick="switchMode('student')">
+                👤 Student Mode
+            </button>
+            <button class="mode-btn" id="guestModeBtn" onclick="switchMode('guest')">
+                🎮 Guest Mode
+            </button>
+        </div>
+
+        <!-- Student Form -->
+        <form id="studentForm" class="form-container">
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input
+                    type="text"
+                    id="studentId"
+                    name="studentId"
+                    placeholder="Enter your ID (e.g., 1001)"
+                    required
+                    pattern="[0-9]{4}"
+                    maxlength="4"
+                >
+            </div>
+
+            <button type="submit" class="submit-btn">Start Personalized Learning</button>
+        </form>
+
+        <!-- Guest Form -->
+        <form id="guestForm" class="form-container" style="display: none;">
+            <div class="form-group">
+                <label for="difficultyLevel">Select Difficulty Level:</label>
+                <div class="difficulty-selector">
+                    <div class="difficulty-option">
+                        <input type="radio" id="level1" name="difficulty" value="1" checked>
+                        <label for="level1">
+                            <span class="level-name">Beginner</span>
+                            <span class="level-desc">Basic vocabulary • 6 word pairs • 2 minutes</span>
+                        </label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="level2" name="difficulty" value="2">
+                        <label for="level2">
+                            <span class="level-name">Intermediate</span>
+                            <span class="level-desc">Common words • 12 word pairs • 1.5 minutes</span>
+                        </label>
+                    </div>
+                    <div class="difficulty-option">
+                        <input type="radio" id="level3" name="difficulty" value="3">
+                        <label for="level3">
+                            <span class="level-name">Advanced</span>
+                            <span class="level-desc">Complex vocabulary • 18 word pairs • 1 minute</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Start Guest Game</button>
+        </form>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading your personalized content...</p>
+        </div>
+
+        <div class="valid-ids">
+            <h3>Available Student IDs:</h3>
+            <div class="id-list">
+                <span class="id-chip" onclick="setStudentId('1001')">1001</span>
+                <span class="id-chip" onclick="setStudentId('1002')">1002</span>
+                <span class="id-chip" onclick="setStudentId('1003')">1003</span>
+                <span class="id-chip" onclick="setStudentId('1004')">1004</span>
+                <span class="id-chip" onclick="setStudentId('1005')">1005</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Personalized Learning Experience © 2024
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // Form elements
+        const studentForm = document.getElementById('studentForm');
+        const guestForm = document.getElementById('guestForm');
+        const studentIdInput = document.getElementById('studentId');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loading = document.getElementById('loading');
+        const studentModeBtn = document.getElementById('studentModeBtn');
+        const guestModeBtn = document.getElementById('guestModeBtn');
+
+        let currentMode = 'student';
+
+        // Mode switching
+        function switchMode(mode) {
+            currentMode = mode;
+            hideMessages();
+
+            if (mode === 'student') {
+                studentModeBtn.classList.add('active');
+                guestModeBtn.classList.remove('active');
+                studentForm.style.display = 'block';
+                guestForm.style.display = 'none';
+            } else {
+                studentModeBtn.classList.remove('active');
+                guestModeBtn.classList.add('active');
+                studentForm.style.display = 'none';
+                guestForm.style.display = 'block';
+            }
+        }
+
+        // Set student ID when clicking on chips
+        function setStudentId(id) {
+            if (currentMode === 'student') {
+                studentIdInput.value = id;
+                studentIdInput.focus();
+            }
+        }
+
+        // Hide all messages
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            loading.style.display = 'none';
+        }
+
+        // Show error message
+        function showError(message) {
+            hideMessages();
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            hideMessages();
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
+
+        // Show loading
+        function showLoading() {
+            hideMessages();
+            loading.style.display = 'block';
+        }
+
+        // Student form submission handler
+        studentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const studentId = studentIdInput.value.trim();
+
+            // Validate input
+            if (!studentId) {
+                showError('Please enter a Student ID');
+                return;
+            }
+
+            // Check if ID exists
+            const student = studentDataService.getStudentById(studentId);
+            if (!student) {
+                showError(`Student ID ${studentId} not found. Please try one of the available IDs.`);
+                return;
+            }
+
+            // Show loading
+            showLoading();
+
+            // Simulate loading time for better UX
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Get student mixed mode data (weakness + vocabulary)
+            const studentData = studentDataService.getStudentMixedModeData(studentId);
+
+            // Store data for game page
+            studentDataService.storeCurrentStudent(studentData);
+
+            // Show success message
+            showSuccess(`Welcome ${student.name}! Redirecting to your personalized game...`);
+
+            // Redirect to game page after delay
+            setTimeout(() => {
+                window.location.href = 'game.html';
+            }, 1500);
+        });
+
+        // Guest form submission handler
+        guestForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            const difficultyLevel = parseInt(selectedDifficulty);
+
+            // Show loading
+            showLoading();
+
+            // Simulate loading time for better UX
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Get guest mode data
+            const guestData = studentDataService.getGuestModeData(difficultyLevel);
+
+            // Store data for game page
+            studentDataService.storeCurrentStudent(guestData);
+
+            // Show success message
+            const levelNames = { 1: 'Beginner', 2: 'Intermediate', 3: 'Advanced' };
+            showSuccess(`Starting ${levelNames[difficultyLevel]} guest game! Redirecting...`);
+
+            // Redirect to game page after delay
+            setTimeout(() => {
+                window.location.href = 'game.html';
+            }, 1500);
+        });
+
+        // Input validation for student ID
+        studentIdInput.addEventListener('input', function(e) {
+            // Only allow numbers
+            this.value = this.value.replace(/[^0-9]/g, '');
+
+            // Hide messages when user starts typing
+            if (this.value.length > 0) {
+                hideMessages();
+            }
+        });
+
+        // Allow Enter key to submit for student form
+        studentIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                studentForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Handle difficulty option clicks
+        document.querySelectorAll('.difficulty-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+
+                // Update visual state
+                document.querySelectorAll('.difficulty-option').forEach(opt => {
+                    opt.style.borderColor = '#e2e8f0';
+                    opt.style.background = 'white';
+                });
+                this.style.borderColor = '#667eea';
+                this.style.background = '#f0f4ff';
+            });
+        });
+
+        // Clear any existing session data when page loads
+        window.addEventListener('load', function() {
+            studentDataService.clearCurrentStudent();
+            switchMode('student'); // Start with student mode
+        });
+    </script>
+</body>
+</html>
