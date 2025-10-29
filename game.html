@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Learning Game</title>
+    <title>لعبة التعلم المخصصة</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, 'Tahoma', 'Segoe UI', sans-serif;
         }
 
         body {
@@ -272,17 +272,77 @@
 
         .instructions {
             background-color: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             margin-top: 30px;
-            max-width: 800px;
+            max-width: 600px;
             text-align: center;
+            position: relative;
+            border: 2px solid #667eea;
+        }
+
+        .instructions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
         }
 
         .instructions h3 {
             color: #ff2e4d;
-            margin-bottom: 10px;
+            margin: 0;
+            font-size: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .close-btn {
+            background: #ff2e4d;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .close-btn:hover {
+            background: #e63946;
+            transform: scale(1.1);
+        }
+
+        .instructions-content {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .instructions-list {
+            text-align: right;
+            margin: 20px 0;
+        }
+
+        .instructions-list li {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #4a5568;
+        }
+
+        .instructions-tip {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 600;
         }
 
         .instructions p {
@@ -445,41 +505,55 @@
 </head>
 <body>
     <div class="header">
-        <h1>Personalized Learning Game</h1>
+        <h1>لعبة التعلم التفاعلية</h1>
         <div id="studentInfo" class="student-info" style="display: none;">
             <div class="student-name" id="studentName"></div>
-            <div class="weakness-label" id="gameModeLabel">Personalized learning game</div>
+            <div class="weakness-label" id="gameModeLabel">لعبة التعلم المخصصة</div>
         </div>
-        <div class="timer">Time: <span id="time">0</span> seconds</div>
+        <div class="timer">الوقت: <span id="time">0</span> ثانية</div>
     </div>
 
     <div class="navigation">
-        <button class="nav-btn" onclick="goHome()">🏠 Home</button>
-        <button class="nav-btn" onclick="tryNewStudent()">👤 New Student</button>
-        <button class="nav-btn" onclick="showInstructions()">📖 Instructions</button>
+        <button class="nav-btn" onclick="goHome()">🏠 الصفحة الرئيسية</button>
+        <button class="nav-btn" onclick="tryNewStudent()">👤 طالب جديد</button>
+        <button class="nav-btn" onclick="showInstructions()">📖 التعليمات</button>
     </div>
 
     <div id="gameContainer" class="game-container">
         <!-- Bubbles will be dynamically generated -->
     </div>
 
-    <button class="restart-btn" id="restartBtn">Restart Game</button>
+    <button class="restart-btn" id="restartBtn">إعادة بدء اللعبة</button>
 
     <div class="instructions" id="instructions" style="display: none;">
-        <h3>How to Play</h3>
-        <p>Click on bubbles to match English words with their Arabic translations.
-           This game features vocabulary based on your difficulty level.
-           Match all pairs successfully to complete the game!</p>
+        <div class="instructions-header">
+            <h3>طريقة اللعب</h3>
+            <button class="close-btn" onclick="hideInstructions()">✕</button>
+        </div>
+        <div class="instructions-content">
+            <p>مرحباً بك في لعبة التعلم التفاعلية! هذه اللعبة تساعدك على تعلم المفردات الإنجليزية بطريقة ممتعة.</p>
+
+            <ul class="instructions-list">
+                <li>🎯 اضغط على الفقاعات لمطابقة الكلمات الإنجليزية مع ترجمتها العربية</li>
+                <li>🧠 اختار مستوى الصعوبة المناسب لك في البداية</li>
+                <li>⏱ حاول إنهاء اللعبة في أسرع وقت ممكن</li>
+                <li>🎉 طابق كل الأزواج بنجاح لإكمال اللعبة</li>
+            </ul>
+
+            <div class="instructions-tip">
+                💡 نصيحة: ركز على الكلمات التي تجدها صعبة، فهذه فرصة ممتازة للتعلم!
+            </div>
+        </div>
     </div>
 
     <div class="completion-message" id="completionMessage">
-        <h2>🎉 Excellent Work!</h2>
-        <p>Completed in: <span id="completionTime">0</span> seconds</p>
-        <p>Great job on mastering your weakness vocabulary!</p>
+        <h2>🎉 عمل رائع!</h2>
+        <p>تم الإنتهاء في: <span id="completionTime">0</span> ثانية</p>
+        <p>أحسنت! لقد أتقنت المفردات الصعبة!</p>
         <div class="completion-actions">
-            <button class="action-btn" onclick="restartGame()">Play Again</button>
-            <button class="action-btn" onclick="tryNewStudent()">New Student</button>
-            <button class="action-btn" onclick="goHome()">Home</button>
+            <button class="action-btn" onclick="restartGame()">العب مرة أخرى</button>
+            <button class="action-btn" onclick="tryNewStudent()">طالب جديد</button>
+            <button class="action-btn" onclick="goHome()">الصفحة الرئيسية</button>
         </div>
     </div>
 
@@ -490,7 +564,7 @@
             const currentStudent = studentDataService.getCurrentStudent();
 
             if (!currentStudent) {
-                showError('No student data found. Please enter your ID first.');
+                showError('لم يتم العثور على بيانات الطالب. يرجى إدخال رقمك أولاً.');
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 3000);
@@ -506,16 +580,16 @@
             const isGuestMode = studentData.isGuestMode;
             const displayName = isGuestMode ? 'Guest User' : studentData.student.name;
             const displayId = isGuestMode ? 'Guest' : `ID: ${studentData.student.id}`;
-            const levelName = { 1: 'Beginner', 2: 'Intermediate', 3: 'Advanced' }[studentData.student.englishLevel];
+            const levelName = { 1: 'مبتدئ', 2: 'متوسط', 3: 'متقدم' }[studentData.student.englishLevel];
 
-            document.getElementById('studentName').textContent = `${displayName} (${displayId}) - ${levelName} Level`;
+            document.getElementById('studentName').textContent = `${displayName} (${displayId}) - مستوى ${levelName}`;
 
             // Update game mode label
             const modeLabel = document.getElementById('gameModeLabel');
             if (isGuestMode) {
-                modeLabel.textContent = `Guest Mode - English-Arabic Vocabulary`;
+                modeLabel.textContent = `وضع الضيف - مفردات إنجليزية عربية`;
             } else {
-                modeLabel.textContent = `Personalized Learning - English-Arabic Vocabulary`;
+                modeLabel.textContent = `التعلم المخصص - مفردات إنجليزية عربية`;
             }
             document.getElementById('studentInfo').style.display = 'block';
 
@@ -699,7 +773,12 @@
 
             window.showInstructions = function() {
                 const instructions = document.getElementById('instructions');
-                instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+                instructions.style.display = 'block';
+            }
+
+            window.hideInstructions = function() {
+                const instructions = document.getElementById('instructions');
+                instructions.style.display = 'none';
             }
 
             // Sound effects
@@ -779,9 +858,9 @@
         function showError(message) {
             document.getElementById('gameContainer').innerHTML = `
                 <div class="error-message">
-                    <h3>Error</h3>
+                    <h3>خطأ</h3>
                     <p>${message}</p>
-                    <p>You will be redirected to the home page...</p>
+                    <p>سيتم تحويلك إلى الصفحة الرئيسية...</p>
                 </div>
             `;
         }

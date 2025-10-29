@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Learning Platform</title>
+    <title>منصة التعلم التفاعلية</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -265,67 +265,67 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎓 Learning Platform</h1>
-        <p class="subtitle">Choose your learning mode to get started</p>
+        <h1>🎓 منصة التعلم</h1>
+        <p class="subtitle">اختر طريقة التعلم المناسبة لك</p>
 
         <!-- Mode Selection -->
         <div class="mode-selector">
             <button class="mode-btn active" id="studentModeBtn" onclick="switchMode('student')">
-                👤 Student Mode
+                👤 وضع الطالب
             </button>
             <button class="mode-btn" id="guestModeBtn" onclick="switchMode('guest')">
-                🎮 Guest Mode
+                🎮 وضع الضيف
             </button>
         </div>
 
         <!-- Student Form -->
         <form id="studentForm" class="form-container">
             <div class="form-group">
-                <label for="studentId">Student ID:</label>
+                <label for="studentId">رقم الطالب:</label>
                 <input
                     type="text"
                     id="studentId"
                     name="studentId"
-                    placeholder="Enter your ID (e.g., 1001)"
+                    placeholder="اكتب رقمك (مثال: 1001)"
                     required
                     pattern="[0-9]{4}"
                     maxlength="4"
                 >
             </div>
 
-            <button type="submit" class="submit-btn">Start Personalized Learning</button>
+            <button type="submit" class="submit-btn">ابدأ التعلم المخصص</button>
         </form>
 
         <!-- Guest Form -->
         <form id="guestForm" class="form-container" style="display: none;">
             <div class="form-group">
-                <label for="difficultyLevel">Select Difficulty Level:</label>
+                <label for="difficultyLevel">اختر مستوى الصعوبة:</label>
                 <div class="difficulty-selector">
                     <div class="difficulty-option">
                         <input type="radio" id="level1" name="difficulty" value="1" checked>
                         <label for="level1">
-                            <span class="level-name">Beginner</span>
-                            <span class="level-desc">Basic vocabulary • 6 word pairs • 2 minutes</span>
+                            <span class="level-name">مبتدئ</span>
+                            <span class="level-desc">مفردات أساسية • 6 كلمات • دقيقتين</span>
                         </label>
                     </div>
                     <div class="difficulty-option">
                         <input type="radio" id="level2" name="difficulty" value="2">
                         <label for="level2">
-                            <span class="level-name">Intermediate</span>
-                            <span class="level-desc">Common words • 12 word pairs • 1.5 minutes</span>
+                            <span class="level-name">متوسط</span>
+                            <span class="level-desc">كلمات شائعة • 12 كلمة • دقيقة ونصف</span>
                         </label>
                     </div>
                     <div class="difficulty-option">
                         <input type="radio" id="level3" name="difficulty" value="3">
                         <label for="level3">
-                            <span class="level-name">Advanced</span>
-                            <span class="level-desc">Complex vocabulary • 18 word pairs • 1 minute</span>
+                            <span class="level-name">متقدم</span>
+                            <span class="level-desc">مفردات معقدة • 18 كلمة • دقيقة</span>
                         </label>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">Start Guest Game</button>
+            <button type="submit" class="submit-btn">ابدأ اللعب كضيف</button>
         </form>
 
         <div id="errorMessage" class="error-message"></div>
@@ -333,11 +333,11 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Loading your personalized content...</p>
+            <p>يحمل محتواك المخصص...</p>
         </div>
 
         <div class="valid-ids">
-            <h3>Available Student IDs:</h3>
+            <h3>أرقام الطلاب المتاحة:</h3>
             <div class="id-list">
                 <span class="id-chip" onclick="setStudentId('1001')">1001</span>
                 <span class="id-chip" onclick="setStudentId('1002')">1002</span>
@@ -348,7 +348,7 @@
         </div>
 
         <div class="footer">
-            Personalized Learning Experience © 2024
+            تجربة التعلم المخصصة © 2024
         </div>
     </div>
 
@@ -427,14 +427,14 @@
 
             // Validate input
             if (!studentId) {
-                showError('Please enter a Student ID');
+                showError('يرجى إدخال رقم الطالب');
                 return;
             }
 
             // Check if ID exists
             const student = studentDataService.getStudentById(studentId);
             if (!student) {
-                showError(`Student ID ${studentId} not found. Please try one of the available IDs.`);
+                showError(`رقم الطالب ${studentId} غير موجود. يرجى اختيار أحد الأرقام المتاحة.`);
                 return;
             }
 
@@ -451,7 +451,7 @@
             studentDataService.storeCurrentStudent(studentData);
 
             // Show success message
-            showSuccess(`Welcome ${student.name}! Redirecting to your personalized game...`);
+            showSuccess(`أهلاً بك ${student.name}! جاري التحويل إلى لعبتك المخصصة...`);
 
             // Redirect to game page after delay
             setTimeout(() => {
@@ -479,8 +479,8 @@
             studentDataService.storeCurrentStudent(guestData);
 
             // Show success message
-            const levelNames = { 1: 'Beginner', 2: 'Intermediate', 3: 'Advanced' };
-            showSuccess(`Starting ${levelNames[difficultyLevel]} guest game! Redirecting...`);
+            const levelNames = { 1: 'مبتدئ', 2: 'متوسط', 3: 'متقدم' };
+            showSuccess(`جاري بدء لعبة الضيف بمستوى ${levelNames[difficultyLevel]}! جاري التحويل...`);
 
             // Redirect to game page after delay
             setTimeout(() => {
