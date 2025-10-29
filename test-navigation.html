@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 25px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Navigation Test Page</h1>
+
+    <div class="status info">
+        <strong>Server Status:</strong> Running on http://localhost:8080
+    </div>
+
+    <h2>Test Navigation Links:</h2>
+
+    <a href="index.html" class="test-button">🏠 Test Index Page</a>
+    <a href="game.html" class="test-button">🎮 Test Game Page</a>
+    <a href="data.js" class="test-button">📄 Test Data File</a>
+
+    <h2>Expected Behavior:</h2>
+    <ul>
+        <li>✅ Index page should load with student/guest mode selection</li>
+        <li>✅ Game page should load with the game interface</li>
+        <li>✅ Data file should display as text or download</li>
+        <li>✅ All navigation should work without redirects</li>
+    </ul>
+
+    <h2>Browser Console Test:</h2>
+    <p>Open browser console (F12) and check for:</p>
+    <ul>
+        <li>✅ No 404 errors for missing files</li>
+        <li>✅ No redirect loops</li>
+        <li>✅ JavaScript loads without errors</li>
+        <li>✅ CSS loads correctly</li>
+    </ul>
+
+    <div class="status success">
+        <strong>✅ Test Complete!</strong><br>
+        If all links work correctly, your server is ready for Railway deployment.
+    </div>
+
+    <script>
+        console.log('🧪 Navigation test page loaded successfully');
+        console.log('📁 Current directory:', window.location.pathname);
+        console.log('🌐 Server URL:', window.location.origin);
+    </script>
+</body>
+</html>

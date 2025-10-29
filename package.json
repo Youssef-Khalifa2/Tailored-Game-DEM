@@ -5,14 +5,15 @@
   "main": "index.html",
   "homepage": ".",
   "scripts": {
-    "start": "npx http-server -p 5000 -o",
+    "start": "npx http-server -p 8080 -o",
     "dev": "npx http-server -p 3000 -o",
     "build": "echo 'Static site - no build required'",
-    "serve": "npx http-server -p 3200 -o",
-    "serve-8000": "npx http-server -p 8000 -o",
+    "serve": "npx http-server -p 8080",
+    "serve-8000": "npx http-server -p 8000",
+    "serve-5000": "npx http-server -p 5000",
     "serve-node": "npx serve . -l 3200 --no-rewrite",
-    "python": "python -m http.server 3200",
-    "python3": "python3 -m http.server 3200"
+    "python": "python -m http.server 8080",
+    "python3": "python3 -m http.server 8080"
   },
   "keywords": [
     "education",

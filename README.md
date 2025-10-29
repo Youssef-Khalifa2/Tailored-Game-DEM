@@ -103,26 +103,26 @@ The platform uses the following student data from `Students.csv`:
 #### Method A: Python HTTP Server (Recommended - No Installation Required)
 ```bash
 # If you have Python 3 installed
-python3 -m http.server 8000
+python3 -m http.server 8080
 
 # If you have Python 2 installed
-python -m SimpleHTTPServer 8000
+python -m SimpleHTTPServer 8080
 
 # Open your browser and go to:
-# http://localhost:8000
+# http://localhost:8080
 ```
 
-#### Method B: Node.js Serve Server
+#### Method B: Node.js HTTP Server (Best Compatibility)
 ```bash
 # Install dependencies (first time only)
 npm install
 
-# Start the local server
-npm run serve
+# Start the local server (opens browser automatically)
+npm start
 
-# Or use alternative ports
+# Manual server start
+npm run serve    # Port 8080
 npm run dev      # Port 3000
-npm start        # Port 5000 (for Railway testing)
 ```
 
 #### Method C: VS Code Live Server Extension
