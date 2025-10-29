@@ -5,13 +5,15 @@
   "main": "index.html",
   "homepage": ".",
   "scripts": {
-    "start": "npx http-server -p 8080 -o",
+    "start": "PORT=${PORT:-5000} npx http-server -p $PORT -a 0.0.0.0 --cors --silent",
     "dev": "npx http-server -p 3000 -o",
     "build": "echo 'Static site - no build required'",
-    "serve": "npx http-server -p 8080",
+    "serve": "npx http-server -p 8080 -o",
     "serve-8000": "npx http-server -p 8000",
-    "serve-5000": "npx http-server -p 5000",
+    "serve-5000": "npx http-server -p 5000 -o",
+    "serve-local": "npx http-server -p 8080 -o",
     "serve-node": "npx serve . -l 3200 --no-rewrite",
+    "healthcheck": "node healthcheck.js",
     "python": "python -m http.server 8080",
     "python3": "python3 -m http.server 8080"
   },

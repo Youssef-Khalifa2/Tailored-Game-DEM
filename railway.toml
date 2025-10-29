@@ -2,11 +2,12 @@
   builder = "nixpacks"
 
 [deploy]
-  startCommand = "npx http-server -p 5000"
-  healthcheckPath = "/"
-  healthcheckTimeout = 100
+  startCommand = "npm start"
+  healthcheckPath = "/health.html"
+  healthcheckTimeout = 60000
   restartPolicyType = "on_failure"
-  restartPolicyMaxRetries = 10
+  restartPolicyMaxRetries = 5
+  sleepForSeconds = 10
 
 [[services]]
   name = "web"

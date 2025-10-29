@@ -37,7 +37,7 @@ Then visit: **http://localhost:8080**
 ```bash
 git init
 git add .
-git commit -m "Ready for Railway deployment"
+git commit -m "Fixed Railway deployment with proper healthcheck"
 ```
 
 ### 2. Push to GitHub
@@ -54,6 +54,13 @@ git push -u origin main
 3. Select your repository
 4. Railway will automatically detect and deploy
 5. Your app will be live at: `https://your-app-name.railway.app`
+
+### 4. Railway Fixes Applied
+- ✅ **Fixed healthcheck**: Uses `/health.html` endpoint
+- ✅ **Proper port binding**: Binds to `0.0.0.0` with PORT environment variable
+- ✅ **CORS enabled**: Prevents cross-origin issues
+- ✅ **Longer timeout**: 60 seconds for healthcheck
+- ✅ **Silent mode**: Reduces log noise
 
 ## Alternative Hosting Options
 
@@ -80,15 +87,28 @@ git push -u origin main
 - ✅ **Fixed**: Changed to port 8080 (avoids conflicts)
 - ✅ **Fixed**: Updated all configuration files
 
+### Railway Healthcheck Failures?
+- ✅ **Fixed**: Added `/health.html` endpoint
+- ✅ **Fixed**: Server binds to `0.0.0.0` instead of localhost
+- ✅ **Fixed**: Uses PORT environment variable with fallback
+- ✅ **Fixed**: Increased healthcheck timeout to 60 seconds
+
+### Railway Deployment Issues?
+- Ensure package.json has correct start command: `PORT=${PORT:-5000} npx http-server -p $PORT -a 0.0.0.0 --cors --silent`
+- Check railway.toml configuration
+- Verify all files are committed to Git
+- Check Railway logs for specific error messages
+
 ### Port Already in Use?
 - Change port in package.json scripts
 - Use `npm run serve-5000` or `npm run serve-8000`
 - Update start-server scripts accordingly
 
-### Railway Deployment Issues?
-- Ensure package.json has correct start command
-- Check railway.toml configuration
-- Verify all files are committed to Git
+### Common Railway Errors & Solutions
+1. **"Service unavailable"**: Fixed with proper port binding and healthcheck
+2. **"Healthcheck timeout"**: Increased to 60 seconds with dedicated health.html
+3. **"Port already in use"**: Using PORT environment variable correctly
+4. **"Build failed"**: Ensure all dependencies are in devDependencies
 
 ## File Structure After Setup
 ```
